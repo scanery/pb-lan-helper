@@ -1,0 +1,109 @@
+<Window x:Class="PBLanHelper.ProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PBLanHelper"
+        Title="PB - LAN Helper" Width="640" Height="500"
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1"
+        Foreground="{StaticResource TextBrush}" FontFamily="Segoe UI"
+        Closing="Window_Closing">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <local:TitleBar x:Name="TopBar"/>
+
+    <Grid Grid.Row="1" Margin="28,12,28,18">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Border x:Name="IconCircle" Width="52" Height="52" CornerRadius="26"
+              Background="{StaticResource AccentBrush}" Margin="0,0,16,0">
+        <TextBlock x:Name="IconText" FontFamily="Segoe MDL2 Assets" FontSize="24" Foreground="White"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Border>
+      <StackPanel Grid.Column="1" VerticalAlignment="Center">
+        <TextBlock x:Name="HeaderTitle" FontSize="20" FontWeight="SemiBold"/>
+        <TextBlock x:Name="HeaderSub" FontSize="12" Foreground="{StaticResource MutedBrush}"
+                   TextWrapping="Wrap" Margin="0,2,0,0"/>
+      </StackPanel>
+    </Grid>
+
+    <ScrollViewer Grid.Row="2" Margin="28,0" VerticalScrollBarVisibility="Auto">
+      <ItemsControl x:Name="StepsList">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid Margin="0,0,0,12">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="28"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding Glyph}" Foreground="{Binding IconBrush}"
+                         FontFamily="Segoe UI Symbol" FontSize="15" VerticalAlignment="Top"/>
+              <StackPanel Grid.Column="1">
+                <TextBlock Text="{Binding Text}" Foreground="{Binding TextBrush}" FontSize="14" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Detail}" Foreground="{Binding DetailBrush}" FontSize="11"
+                           TextWrapping="Wrap" Visibility="{Binding DetailVisibility}"/>
+                <ProgressBar Height="4" Maximum="1" Value="{Binding Percent, Mode=OneWay}"
+                             Visibility="{Binding BarVisibility}" Margin="0,6,24,0"/>
+              </StackPanel>
+              <TextBlock Grid.Column="2" Text="{Binding PercentText}" FontSize="12"
+                         Foreground="{StaticResource MutedBrush}" VerticalAlignment="Top"/>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+
+    <Grid Grid.Row="3" Margin="28,8,28,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <ProgressBar x:Name="Overall" Maximum="100" VerticalAlignment="Center"/>
+      <TextBlock x:Name="CountText" Grid.Column="1" Margin="14,0,0,0" FontSize="12"
+                 Foreground="{StaticResource MutedBrush}"/>
+    </Grid>
+
+    <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="28,16,28,22">
+      <Button x:Name="BtnRetry" Style="{StaticResource GhostButton}" Content="Tentar novamente"
+              Width="140" Height="36" Margin="0,0,12,0" Visibility="Collapsed" Click="Retry_Click"/>
+      <Button x:Name="BtnCancel" Style="{StaticResource GhostButton}" Content="Cancelar"
+              Width="120" Height="36" Click="Cancel_Click"/>
+      <Button x:Name="BtnClose" Style="{StaticResource PrimaryButton}" Content="Fechar"
+              Width="120" Height="36" Visibility="Collapsed" Click="Close_Click"/>
+    </StackPanel>
+
+    <!-- Confirmação (Limpar) -->
+    <Grid x:Name="ConfirmPanel" Grid.Row="1" Grid.RowSpan="4" Background="{StaticResource BgBrush}"
+          Visibility="Collapsed">
+      <StackPanel Margin="40,24,40,0">
+        <StackPanel Orientation="Horizontal">
+          <Border Width="52" Height="52" CornerRadius="26" Background="{StaticResource DangerBrush}">
+            <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="24" Foreground="White"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          </Border>
+          <TextBlock Text="Tem certeza que deseja limpar?" FontSize="20" FontWeight="SemiBold"
+                     VerticalAlignment="Center" Margin="16,0,0,0"/>
+        </StackPanel>
+        <TextBlock x:Name="ConfirmText" Margin="0,28,0,0" FontSize="14" TextWrapping="Wrap"
+                   Foreground="{StaticResource MutedBrush}"/>
+        <TextBlock Text="Esta operação não pode ser desfeita." Margin="0,14,0,0" FontSize="14"
+                   Foreground="{StaticResource MutedBrush}"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,40,28">
+        <Button Style="{StaticResource GhostButton}" Content="Cancelar" Width="120" Height="36"
+                Margin="0,0,12,0" Click="ConfirmCancel_Click"/>
+        <Button Style="{StaticResource DangerButton}" Content="Limpar" Width="120" Height="36"
+                Click="ConfirmOk_Click"/>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</Window>
